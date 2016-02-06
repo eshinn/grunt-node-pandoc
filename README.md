@@ -37,53 +37,45 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.flags
 Type: `String`
-Default value: `',  '`
+Default value: `false`
 
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
+A string value that is used to pass along to PanDoc as arguments/flags per the CLI (command-line-interface).
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+In this example, the default options are used to show their optional use. So if the `section1.md` file has the content `# Hello` and the `section2.md` file had the content `1 2 3`, the generated result would be `\section{Hello}\label{hello}\n\n1 2 3`
 
 ```js
 grunt.initConfig({
   node_pandoc: {
     options: {},
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      'dest/default_options.tex': ['src/section1.md', 'src/section2.md'],
     },
   },
 });
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+In this example, custom `flags` are used to specify options permitted by the PanDoc CLI (command-line-interface). So if the `section1.md` file has the content `# Hello` and the `section2.md` file had the content `1 2 3`, the generated result in this case would be `# Hello\n\n1 2 3`
 
 ```js
 grunt.initConfig({
   node_pandoc: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      flags: "--atx-headers"
     },
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      'dest/default_options.md': ['src/section1.md', 'src/section2.md'],
     },
   },
 });
 ```
 
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
+## License
 
-## Release History
-_(Nothing yet)_
+Copyright &copy; Eric Shinn  
+Licensed under the MIT License
