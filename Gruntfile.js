@@ -30,20 +30,18 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     node_pandoc: {
-      default_options: {
+
+      markdown_options: {
         options: {
+          flags: '--atx-headers'
         },
         files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
+          'tmp/es_options.md': ['test/fixtures/es_testing.md', 'test/fixtures/es_123.md']
         }
       },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
+      latex_options: {
         files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
+          'tmp/es_options.tex': ['test/fixtures/es_testing.md', 'test/fixtures/es_123.md']
         }
       }
     },
@@ -69,5 +67,6 @@ module.exports = function(grunt) {
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
+  // grunt.registerTask('default', ['clean', 'node_pandoc']);
 
 };

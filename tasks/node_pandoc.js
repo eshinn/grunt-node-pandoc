@@ -10,41 +10,55 @@
 
 module.exports = function(grunt) {
 
+  var path = require('path');
+  var nodePandoc = require('node-pandoc');
+
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
   grunt.registerMultiTask('node_pandoc', 'Control node-pandoc via Grunt', function() {
     // Merge task-specific and/or target-specific options with these defaults.
+
     var options = this.options({
-      punctuation: '.',
-      separator: ', '
+      flags: false
     });
 
-    // Iterate over all specified file groups.
+    var done = this.async();
+    var tally = {
+      dirs: 0,
+      files: 0
+    };
+
     this.files.forEach(function(f) {
-      // Concat specified files.
       var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
         if (!grunt.file.exists(filepath)) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
           return false;
         } else {
           return true;
         }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+      });
 
-      // Handle options.
-      src += options.punctuation;
+      grunt.verbose.writeln('Creating ' + f.dest);
+      tally.dirs++;
+      grunt.file.mkdir(path.dirname(f.dest));
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
-
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+      nodePandoc(f.src.shift(),f.src.concat([(options.flags ? options.flags+' -o' : '-o'),f.dest]).join(' '),function(err,result){
+        if (err) {
+          grunt.log.warn(err);
+        }
+        if (result) {
+          tally.files++;
+          if (tally.dirs) {
+            grunt.log.write('Created '+tally.dirs.toString()+(tally.dirs === 1 ? ' directory' : ' directories'));
+          }
+          if (tally.files) {
+            grunt.log.write((tally.dirs ? ', compiled ' : 'Compiled ')+tally.files.toString()+(tally.files === 1 ? ' file' : ' files'));
+          }
+          grunt.log.writeln();
+          done();
+        }
+      });
     });
   });
-
 };
