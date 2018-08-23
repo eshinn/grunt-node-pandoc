@@ -28,8 +28,10 @@ grunt.initConfig({
     options: {
       // Task-specific options go here.
     },
-    your_target: {
-      // Target-specific file lists and/or options go here.
+    files: {
+      // Target-specific file lists go here.
+      src: [ 'inputFile1', 'inputFile2', ... ] ,
+      dest: 'outputFile',
     },
   },
 });
@@ -53,7 +55,8 @@ grunt.initConfig({
   node_pandoc: {
     options: {},
     files: {
-      'dest/default_options.tex': ['src/section1.md', 'src/section2.md'],
+      src: ['src/section1.md', 'src/section2.md'],
+      dest: 'dest/default_options.tex'
     },
   },
 });
@@ -69,7 +72,8 @@ grunt.initConfig({
       flags: "--atx-headers"
     },
     files: {
-      'dest/default_options.md': ['src/section1.md', 'src/section2.md'],
+      src: ['src/section1.md', 'src/section2.md'],
+      dest: 'dest/default_options.md'
     },
   },
 });
